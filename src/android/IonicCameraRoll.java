@@ -73,6 +73,7 @@ public class IonicCameraRoll extends CordovaPlugin {
             JSONObject json = new JSONObject();
             json.put("path", fullImagePath);
             json.put("thumbnailPath", thumbnailPath);
+            json.put("orientation", getOrientation(fullImagePath));
             json.put("date", dateFromImagePath(fullImagePath));
 
             PluginResult r = new PluginResult(PluginResult.Status.OK, json);
@@ -88,6 +89,23 @@ public class IonicCameraRoll extends CordovaPlugin {
         PluginResult r = new PluginResult(PluginResult.Status.OK, new JSONObject());
         r.setKeepCallback(true);
         this.callbackContext.sendPluginResult(r);
+    }
+
+    private static int getOrientation(String fullImagePath) {
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(fullImagePath);
+        } catch (IOException e) {
+            return 0;
+        }
+        if (exif == null) return 0;
+
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) return 90;
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) return 180;
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) return 270;
+        return 0;
     }
 
     /**

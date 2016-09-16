@@ -18,7 +18,8 @@ cordova plugin add https://github.com/bamlab/cordova-camera-roll.git
 ```javascript
 
 CameraRoll.getPhotos(function(photo) {
-  // `photo` is an object with `path`, `date` and `thumbnailPath` (android only).
+  // `photo` is an object with `path`, `date`,
+  // `thumbnailPath` (android only) and `orientation` (in degrees) (android only).
   //
   // On iOS, paths are prefixed asset-library://
   // So if you are using Angular and ng-src, make sure to whitelist this URL scheme.
